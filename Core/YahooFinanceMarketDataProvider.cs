@@ -58,6 +58,8 @@ namespace WavesLogicFinance.Core
 
 			var result = new QuotesData()
 			{
+				Symbol = stocks,
+				Currency = rs[0].Meta.Currency,
 				Interval = AggregationInterval.Day,
 				List = list
 			};
@@ -79,9 +81,16 @@ namespace WavesLogicFinance.Core
 
 		record YahooFinanceResponseResult
 		{
+			public YahooFinanceResponseMeta Meta { get; init; }
+
 			public int[] Timestamp { get; init; }
 
 			public YahooFinanceResonseIndicators Indicators { get; init; }
+		}
+
+		record YahooFinanceResponseMeta
+		{
+			public string Currency { get; init;  }
 		}
 
 		record YahooFinanceResonseIndicators

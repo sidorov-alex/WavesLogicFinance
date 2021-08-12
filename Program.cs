@@ -19,9 +19,10 @@ namespace WavesLogicFinance
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			IMarketDataProvider marketDataProvider = new YahooFinanceMarketDataProvider();
+			var marketDataProvider = new YahooFinanceMarketDataProvider();
+			var exporter = new PdfQuotesDataExporter();
 
-			var mainForm = new MainForm(marketDataProvider);
+			var mainForm = new MainForm(marketDataProvider, exporter);
 
 			Application.Run(mainForm);
 		}

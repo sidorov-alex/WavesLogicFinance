@@ -39,6 +39,7 @@ namespace WavesLogicFinance
 			this.dateColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.openColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.closeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
 			label1 = new System.Windows.Forms.Label();
 			label2 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.quotesGridView)).BeginInit();
@@ -99,6 +100,7 @@ namespace WavesLogicFinance
 			this.saveButton.TabIndex = 4;
 			this.saveButton.Text = "Save";
 			this.saveButton.UseVisualStyleBackColor = true;
+			this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
 			// 
 			// quotesGridView
 			// 
@@ -139,6 +141,10 @@ namespace WavesLogicFinance
 			this.closeColumn.Name = "closeColumn";
 			this.closeColumn.Width = 125;
 			// 
+			// saveFileDialog
+			// 
+			this.saveFileDialog.DefaultExt = "pdf";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -172,6 +178,7 @@ namespace WavesLogicFinance
 		private System.Windows.Forms.DataGridViewTextBoxColumn dateColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn openColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn closeColumn;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog;
 	}
 }
 

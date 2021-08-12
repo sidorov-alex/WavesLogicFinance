@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using Lers.Utils;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WavesLogicFinance.Core;
-using Lers.Utils;
 
 namespace WavesLogicFinance
 {
 	internal partial class MainForm : Form
 	{
 		private IMarketDataProvider marketDataProvider;
+		private IQuotesDataExporter exporter;
 
 		private QuotesAggregator aggregator = new QuotesAggregator();
 
-		internal MainForm(IMarketDataProvider marketDataProvider)
+		private QuotesData data;
+
+		internal MainForm(IMarketDataProvider marketDataProvider, IQuotesDataExporter exporter)
 		{
 			InitializeComponent();
 
@@ -27,6 +24,7 @@ namespace WavesLogicFinance
 			InitializeIntervalComboBox();
 
 			this.marketDataProvider = marketDataProvider;
+			this.exporter = exporter;
 		}
 
 		private void InitializeRangeComboBox()
@@ -70,14 +68,34 @@ namespace WavesLogicFinance
 				MessageBox.Show(this, "Error loading data from provider.\r\n\r\n" + exc.JoinMessages(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
+		
+		private void saveButton_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				if (this.data != null)
+				{
+					this.saveFileDialog.FileName = this.data.Symbol + ".pdf";
+
+					if (this.saveFileDialog.ShowDialog(this) == DialogResult.OK)
+					{
+						this.exporter.Export(data, this.saveFileDialog.FileName);
+					}
+				}
+			}
+			catch (Exception exc)
+			{
+				MessageBox.Show(this, "Error saving data to file.\r\n\r\n" + exc.JoinMessages(), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
 
 		private async Task RefreshData()
 		{
-			var quotesData = await this.marketDataProvider.GetQuotesAsync("AAPL", GetSelectedRange());
+			this.data = await this.marketDataProvider.GetQuotesAsync("AAPL", GetSelectedRange());
 
-			quotesData = await this.aggregator.AggregateDataAsync(quotesData, GetSelectedInterval());
+			this.data = await this.aggregator.AggregateDataAsync(this.data, GetSelectedInterval());
 
-			this.quotesGridView.DataSource = quotesData.List;
+			this.quotesGridView.DataSource = this.data.List;
 		}
 	}
 }

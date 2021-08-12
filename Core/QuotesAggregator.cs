@@ -38,6 +38,8 @@ namespace WavesLogicFinance.Core
 				{
 					var result = new QuotesData()
 					{
+						Symbol = data.Symbol,
+						Currency = data.Currency,
 						Interval = interval,
 						List = q.ToList()
 					};
